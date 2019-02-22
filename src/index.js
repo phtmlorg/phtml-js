@@ -25,10 +25,6 @@ export default new phtml.Plugin('phtml-js', opts => {
 			});
 
 			if (isScriptElement(element)) {
-				if (!element.nodes.length) {
-					element.nodes.append('');
-				}
-
 				const target = element.nodes[0];
 				const source = target.data;
 
@@ -73,9 +69,9 @@ export default new phtml.Plugin('phtml-js', opts => {
 });
 
 function isScriptElement(node) {
-	return /^script$/.test(node.name) && node.nodes.length <= 1;
+	return /^script$/.test(node.name) && node.nodes.length === 1;
 }
 
 function isOnAttribute(attr) {
-	return /^on[\W\w]/.test(attr.name);
+	return /^on[\W\w]/.test(attr.name) && attr.value;
 }
