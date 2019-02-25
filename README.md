@@ -20,6 +20,14 @@
 
 ## Usage
 
+Transform HTML files directly from the command line:
+
+```bash
+npx phtml source.html output.html -p @phtml/js
+```
+
+### Node
+
 Add [pHTML JS] to your project:
 
 ```bash
