@@ -6,13 +6,11 @@ export default new phtml.Plugin('phtml-js', opts => {
 	const plugins = [].concat(Object(opts).plugins || []);
 	const presets = [].concat(Object(opts).presets || []);
 	const sourceMapAttributes = Boolean(Object(opts).sourceMapAttributes);
-	const globalTransformOptions = 'transformOptions' in Object(opts) ? Object.assign({}, Object(opts).transformOptions) : { sourceMaps: true };
-
-	const map = new WeakMap();
+	const globalTransformOptions = 'transformOptions' in Object(opts) ? { ...Object(Object(opts).transformOptions) } : { sourceMaps: true };
 
 	return {
-		Element(element, result) {
-			const promises = map.get(result) || map.set(result, []).get(result);
+		Element (element) {
+			const promises = [];
 
 			element.attrs.forEach(attr => {
 				if (isOnAttribute(attr)) {
@@ -34,9 +32,6 @@ export default new phtml.Plugin('phtml-js', opts => {
 					})
 				);
 			}
-		},
-		Root(root, result) {
-			const promises = map.get(result) || map.set(result, []).get(result);
 
 			return Promise.all(promises);
 		}
