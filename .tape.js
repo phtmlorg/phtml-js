@@ -4,6 +4,7 @@ module.exports = {
 		options: {
 			presets: [
 				['@babel/env', {
+					corejs: 3,
 					loose: true,
 					modules: false,
 					targets: 'last 2 versions, not dead',
@@ -18,6 +19,7 @@ module.exports = {
 			sourceMapAttributes: true,
 			presets: [
 				['@babel/env', {
+					corejs: 3,
 					loose: true,
 					modules: false,
 					targets: 'last 2 versions, not dead',
@@ -31,6 +33,7 @@ module.exports = {
 		options: {
 			presets: [
 				['@babel/env', {
+					corejs: 3,
 					loose: true,
 					modules: false,
 					targets: 'last 2 versions, not dead',

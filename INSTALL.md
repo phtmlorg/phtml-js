@@ -2,133 +2,103 @@
 
 [pHTML JS] runs in all Node environments, with special instructions for:
 
-| [Node](#node) | [pHTML CLI](#phtml-cli) | [Webpack](#webpack) | [Create React App](#create-react-app) | [Gulp](#gulp) | [Grunt](#grunt) |
-| --- | --- | --- | --- | --- | --- |
+| [Node](#node) | [CLI](#phtml-cli) | [Eleventy](#eleventy) | [Gulp](#gulp) | [Grunt](#grunt) |
+| --- | --- | --- | --- | --- |
 
 ## Node
 
 Add [pHTML JS] to your project:
 
 ```bash
-npm install @phtml/js --save-dev
+npm install @phtmlorg/js --save-dev
 ```
 
 Use [pHTML JS] to process your HTML:
 
 ```js
-const phtmlJs = require('@phtml/js');
+const phtmlJs = require('@phtmlorg/js')
 
-phtmlJs.process(YOUR_HTML /*, processOptions, pluginOptions */);
+phtmlJs.process(YOUR_HTML /*, processOptions, pluginOptions */)
 ```
 
 Or use it as a [pHTML] plugin:
 
 ```js
-const phtml = require('phtml');
-const phtmlJs = require('@phtml/js');
+const phtml = require('phtml')
+const phtmlJs = require('@phtmlorg/js')
 
 phtml([
   phtmlJs(/* pluginOptions */)
-]).process(YOUR_HTML /*, processOptions */);
+]).process(YOUR_HTML /*, processOptions */)
 ```
 
-## pHTML CLI
+## CLI
 
-Add [pHTML CLI] to your project:
+Transform HTML files directly from the command line:
 
 ```bash
-npm install phtml-cli --save-dev
+npx phtml source.html output.html -p @phtmlorg/js
 ```
 
-Use [pHTML JS] in your `phtml.config.js` configuration file:
+Alternatively, add [pHTML JS] to your `phtml.config.js` configuration file:
 
 ```js
-const phtmlJs = require('@phtml/js');
-
 module.exports = {
   plugins: [
-    phtmlJs(/* pluginOptions */)
+    ['@phtmlorg/js', /* pluginOptions */]
   ]
 }
 ```
 
-## Webpack
+## Eleventy
 
-Add [pHTML Loader] to your project:
+Add [pHTML Eleventy] and [pHTML JS] to your Eleventy project:
 
-```bash
-npm install phtml-loader --save-dev
+```sh
+npm install @phtmlorg/js @phtml/11ty --save-dev
 ```
 
-Use [pHTML JS] in your Webpack configuration:
+Use [pHTML Eleventy] and [pHTML JS] in your Eleventy configuration:
 
 ```js
-const phtmlJs = require('@phtml/js');
+const phtml11ty = require('@phtml/11ty')
+const phtmlJs = require('@phtmlorg/js')
 
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.html$/,
-        use: [
-          'style-loader',
-          { loader: 'html-loader', options: { importLoaders: 1 } },
-          { loader: 'phtml-loader', options: {
-            ident: 'phtml',
-            plugins: () => [
-              phtmlJs(/* pluginOptions */)
-            ]
-          } }
-        ]
-      }
+module.exports = function (eleventyConfig) {
+  eleventyConfig.addPlugin(phtml11ty, {
+    use: [
+      phtmlJs(/* pluginOptions */)
     ]
-  }
+  })
 }
-```
-
-## Create React App
-
-Add [React App Rewired] and [React App Rewire pHTML] to your project:
-
-```bash
-npm install react-app-rewired react-app-rewire-html --save-dev
-```
-
-Use [React App Rewire pHTML] and [pHTML JS] in your
-`config-overrides.js` file:
-
-```js
-const reactAppRewirePHTML = require('react-app-rewire-phtml');
-const phtmlJs = require('@phtml/js');
-
-module.exports = config => reactAppRewirePHTML(config, {
-  plugins: () => [
-    phtmlJs(/* pluginOptions */)
-  ]
-});
 ```
 
 ## Gulp
 
-Add [Gulp pHTML] to your project:
+Add [Gulp pHTML] and [pHTML JS] to your project:
 
 ```bash
-npm install gulp-phtml --save-dev
+npm install @phtmlorg/js gulp-phtml --save-dev
 ```
 
-Use [pHTML JS] in your Gulpfile:
+Use [Gulp pHTML] and [pHTML JS] in your Gulpfile:
 
 ```js
-const phtml = require('gulp-phtml');
-const phtmlJs = require('@phtml/js');
+const gulp = require('gulp')
+const gulpPhtml = require('gulp-phtml')
+const phtmlJs = require('@phtmlorg/js')
 
-gulp.task('html', () => gulp.src('./src/*.html').pipe(
-  phtml([
-    phtmlJs(/* pluginOptions */)
-  ])
-).pipe(
-  gulp.dest('.')
-));
+gulp.task('html',
+  () => gulp.src('./src/*.html').pipe(
+    gulpPhtml({
+      plugins: [
+        phtmlJs(/* pluginOptions */)
+      ]
+    })
+  ).pipe(
+    gulp.dest('dist')
+  )
+)
 ```
 
 ## Grunt
@@ -139,32 +109,33 @@ Add [Grunt pHTML] to your project:
 npm install grunt-phtml --save-dev
 ```
 
-Use [pHTML JS] in your Gruntfile:
+Use [Grunt pHTML] and [pHTML JS] in your Gruntfile:
 
 ```js
-const phtmlJs = require('@phtml/js');
+const phtmlJs = require('@phtmlorg/js')
 
-grunt.loadNpmTasks('grunt-phtml');
+grunt.loadNpmTasks('grunt-phtml')
 
 grunt.initConfig({
   phtml: {
     options: {
-      use: [
-       phtmlJs(/* pluginOptions */)
+      plugins: [
+        phtmlJs(/* pluginOptions */)
       ]
     },
     dist: {
-      src: '*.html'
+      files: [{
+        expand: true,
+        src: 'src/*.html',
+        dest: 'dest'
+      }]
     }
   }
-});
+})
 ```
 
 [Gulp pHTML]: https://github.com/phtmlorg/gulp-phtml
 [Grunt pHTML]: https://github.com/phtmlorg/grunt-phtml
 [pHTML]: https://github.com/phtmlorg/phtml
-[pHTML CLI]: https://github.com/phtmlorg/phtml-cli
-[pHTML Loader]: https://github.com/phtmlorg/phtml-loader
+[pHTML Eleventy]: https://github.com/phtmlorg/phtml-11ty
 [pHTML JS]: https://github.com/phtmlorg/phtml-js
-[React App Rewire pHTML]: https://github.com/phtmlorg/react-app-rewire-phtml
-[React App Rewired]: https://github.com/timarney/react-app-rewired
